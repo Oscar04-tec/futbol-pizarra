@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Proyeccion de jugadores · Premier League y LaLiga</title>
+<title>Proyeccion por partido · Premier League y LaLiga</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -12,18 +12,19 @@
 --tiza-tenue:rgba(232,237,233,.16);--ambar:#E9A13B}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--pizarra);color:var(--tiza);font-family:'IBM Plex Sans',system-ui,sans-serif;padding:28px 20px 48px;-webkit-font-smoothing:antialiased}
-.wrap{max-width:860px;margin:0 auto}
+.wrap{max-width:980px;margin:0 auto}
 header{border-bottom:1px solid var(--tiza-tenue);padding-bottom:18px;margin-bottom:22px}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tiza-suave)}
 h1{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:.02em;line-height:1;margin:6px 0 8px}
-.sub{font-size:13.5px;color:var(--tiza-suave);max-width:64ch;line-height:1.6}
+.sub{font-size:13.5px;color:var(--tiza-suave);max-width:66ch;line-height:1.6}
 .controles{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
 .campo{display:flex;flex-direction:column;gap:6px}
 .sel-l{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--tiza-suave)}
-select{background:var(--pizarra);color:var(--tiza);border:1px solid var(--tiza-tenue);border-radius:2px;padding:8px 12px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;min-width:180px;cursor:pointer}
+select{background:var(--pizarra);color:var(--tiza);border:1px solid var(--tiza-tenue);border-radius:2px;padding:8px 12px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;min-width:200px;cursor:pointer}
 select:focus-visible{outline:2px solid var(--ambar);outline-offset:2px}
-.panel{background:var(--pizarra-2);border:1px solid var(--tiza-tenue);border-radius:3px;padding:16px}
-.panel-t{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tiza-suave);margin-bottom:12px}
+.panel{background:var(--pizarra-2);border:1px solid var(--tiza-tenue);border-radius:3px;padding:16px;margin-bottom:18px}
+.panel-t{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tiza-suave);margin-bottom:4px}
+.rival{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ambar);margin-bottom:12px}
 .nota{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tiza-suave);margin:0 0 14px;line-height:1.6}
 table{width:100%;border-collapse:collapse}
 th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--tiza-suave);text-align:right;padding:8px 6px;border-bottom:1px solid var(--tiza-tenue);font-weight:400}
@@ -35,22 +36,22 @@ tr:last-child td{border-bottom:none}
 .prob{color:var(--ambar)}
 .aviso{border-left:2px solid var(--ambar);padding:10px 14px;background:rgba(233,161,59,.07);font-size:12.5px;line-height:1.6;color:var(--tiza-suave);margin-bottom:16px}
 footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--tiza-tenue);font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--tiza-suave);line-height:1.7}
-@media(max-width:560px){th:nth-child(2),td:nth-child(2){display:none}}
+@media(max-width:600px){th:nth-child(2),td:nth-child(2){display:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
   <p class="eyebrow">Premier League · LaLiga · temporada 2026-27</p>
-  <h1>Proyeccion de jugadores</h1>
-  <p class="sub">Tasas por 90 minutos convertidas en probabilidades. Mueve el selector de minutos y observa que la incertidumbre que domina no es la del jugador, sino la de si juega.</p>
+  <h1>Proyeccion por partido</h1>
+  <p class="sub">Elige un partido y mira las dos plantillas proyectadas. Las tasas por 90 se ajustan por lo que concede el rival. Mueve el selector de minutos: la incertidumbre que domina no es la del jugador, sino la de si juega.</p>
 </header>
 
 <div class="controles">
   <div class="campo"><label class="sel-l" for="sel-liga">Liga</label>
     <select id="sel-liga"><option value="premier">Premier League</option><option value="laliga">LaLiga</option></select></div>
-  <div class="campo"><label class="sel-l" for="sel-equipo">Equipo</label>
-    <select id="sel-equipo"></select></div>
+  <div class="campo"><label class="sel-l" for="sel-partido">Partido</label>
+    <select id="sel-partido"></select></div>
   <div class="campo"><label class="sel-l" for="sel-min">Minutos esperados</label>
     <select id="sel-min">
       <option value="90">90 · titular completo</option>
@@ -61,23 +62,18 @@ footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--tiza-tenue);f
 </div>
 
 <div id="aviso" class="aviso" hidden></div>
-
-<div class="panel">
-  <p class="panel-t" id="titulo">Proyeccion</p>
-  <p class="nota" id="nota"></p>
-  <table><thead><tr>
-    <th>Jugador</th><th>Min jugados</th><th>Pases</th><th>Tiros</th><th>Al arco</th><th>P(2+ tiros)</th><th>P(1+ arco)</th>
-  </tr></thead><tbody id="cuerpo"></tbody></table>
-</div>
+<p class="nota" id="nota"></p>
+<div id="salida"></div>
 
 <footer>
-  Tasas y minutos: FBref, temporada actual mezclada con la anterior segun minutos acumulados.<br>
+  Tasas, calendario y factores de rival: FBref. Temporada actual mezclada con la anterior segun minutos acumulados.<br>
+  El factor de rival es el cociente entre los tiros que concede y el promedio de la liga. Ajuste crudo: mueve unos puntos, no reinventa la proyeccion.<br>
   Los JSON se generan con generar_datos.py y se suben al repo. La pagina no raspa nada.
 </footer>
 </div>
 
 <script>
-const selLiga=document.getElementById('sel-liga'), selEq=document.getElementById('sel-equipo'),
+const selLiga=document.getElementById('sel-liga'), selP=document.getElementById('sel-partido'),
       selMin=document.getElementById('sel-min'), aviso=document.getElementById('aviso');
 let LIGA=null;
 
@@ -93,32 +89,53 @@ async function cargar(){
   }catch(e){
     LIGA=null; aviso.hidden=false;
     aviso.textContent='No encontre datos/'+slug+'.json. Corre generar_datos.py y sube la carpeta datos/ al repo.';
-    selEq.innerHTML=''; document.getElementById('cuerpo').innerHTML=''; return;
+    selP.innerHTML=''; document.getElementById('salida').innerHTML=''; return;
   }
   aviso.hidden=!LIGA.ejemplo;
   if(LIGA.ejemplo) aviso.textContent='Estos son datos de ejemplo para que veas el formato. Corre generar_datos.py para reemplazarlos con la temporada real.';
-  selEq.innerHTML=Object.keys(LIGA.equipos).sort().map(e=>'<option>'+e+'</option>').join('');
+
+  const ps=(LIGA.partidos||[]).filter(p=>LIGA.equipos[p.local]&&LIGA.equipos[p.visitante]);
+  if(!ps.length){
+    selP.innerHTML='<option>Sin partidos disponibles</option>';
+    document.getElementById('salida').innerHTML=
+      '<div class="panel"><p class="nota">El calendario no trajo partidos con las dos plantillas cargadas. Revisa la salida de generar_datos.py.</p></div>';
+    return;
+  }
+  LIGA._ps=ps;
+  selP.innerHTML=ps.map((p,i)=>'<option value="'+i+'">'+p.fecha+' · '+p.local+' vs '+p.visitante+'</option>').join('');
   pintar();
 }
 
-function pintar(){
-  if(!LIGA) return;
-  const js=LIGA.equipos[selEq.value]; if(!js) return;
-  const m=+selMin.value, f=m/90;
-  document.getElementById('titulo').textContent=LIGA.liga+' · '+selEq.value;
-  document.getElementById('nota').textContent=
-    'Proyeccion a '+m+' minutos. Tasas por 90 de la temporada, mezcladas con la anterior. Poisson sobre el conteo. Datos generados '+LIGA.generado+'.';
-  document.getElementById('cuerpo').innerHTML=[...js].sort((a,b)=>b.p90-a.p90).map(j=>{
-    const lt=j.t90*f, la=j.a90*f;
+function tabla(equipo, rival, factor, m){
+  const js=LIGA.equipos[equipo], f=m/90;
+  const filas=[...js].sort((a,b)=>b.p90-a.p90).map(j=>{
+    const lt=j.t90*f*factor, la=j.a90*f*factor;
     return '<tr><td>'+j.n+'</td><td class="tenue">'+j.min+'</td>'+
-    '<td>'+Math.round(j.p90*f)+'</td><td>'+lt.toFixed(1)+'</td><td>'+la.toFixed(1)+'</td>'+
-    '<td class="prob">'+Math.round(poisson(lt,2)*100)+'%</td>'+
-    '<td class="prob">'+Math.round(poisson(la,1)*100)+'%</td></tr>';
+      '<td>'+Math.round(j.p90*f)+'</td><td>'+lt.toFixed(1)+'</td><td>'+la.toFixed(1)+'</td>'+
+      '<td class="prob">'+Math.round(poisson(lt,2)*100)+'%</td>'+
+      '<td class="prob">'+Math.round(poisson(la,1)*100)+'%</td></tr>';
   }).join('');
+  const pct=Math.round((factor-1)*100);
+  const txt=pct===0?'rival neutral':(pct>0?'+'+pct+'% de tiros':pct+'% de tiros');
+  return '<div class="panel"><p class="panel-t">'+equipo+'</p>'+
+    '<p class="rival">vs '+rival+' · factor '+factor.toFixed(2)+' · '+txt+'</p>'+
+    '<table><thead><tr><th>Jugador</th><th>Min jugados</th><th>Pases</th><th>Tiros</th>'+
+    '<th>Al arco</th><th>P(2+ tiros)</th><th>P(1+ arco)</th></tr></thead><tbody>'+filas+'</tbody></table></div>';
+}
+
+function pintar(){
+  if(!LIGA||!LIGA._ps) return;
+  const p=LIGA._ps[+selP.value]; if(!p) return;
+  const m=+selMin.value, F=LIGA.factores||{};
+  const fLocal=F[p.visitante]||1, fVisita=F[p.local]||1;
+  document.getElementById('nota').textContent=
+    'Proyeccion a '+m+' minutos. Tasas por 90 ajustadas por lo que concede el rival. Poisson sobre el conteo. Datos generados '+LIGA.generado+'.';
+  document.getElementById('salida').innerHTML=
+    tabla(p.local,p.visitante,fLocal,m)+tabla(p.visitante,p.local,fVisita,m);
 }
 
 selLiga.addEventListener('change',cargar);
-selEq.addEventListener('change',pintar);
+selP.addEventListener('change',pintar);
 selMin.addEventListener('change',pintar);
 cargar();
 </script>
